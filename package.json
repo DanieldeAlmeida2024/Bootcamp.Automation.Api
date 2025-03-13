@@ -1,0 +1,23 @@
+{
+  "name": "bootcamp.automation.api",
+  "version": "1.0.0",
+  "description": "- Neste projeto é feito a automação de teste de qualidade de API de login, para fins didáticos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanieldeAlmeida2024/Bootcamp.Automation.Api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanieldeAlmeida2024/Bootcamp.Automation.Api/issues"
+  },
+  "homepage": "https://github.com/DanieldeAlmeida2024/Bootcamp.Automation.Api#readme",
+  "dependencies": {
+    "cypress": "^14.2.0"
+  }
+}
