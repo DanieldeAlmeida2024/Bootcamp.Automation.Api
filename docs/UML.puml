@@ -1,0 +1,17 @@
+@startuml
+title Bootcamp.Automation.Api - fluxo de atividades (conceitual)
+actor Participante
+component "Roteiro de entrada" as Entrada
+component "Validacao" as Validacao
+component "Atividade ou teste" as Atividade
+component "Dependencia externa" as Externa
+Participante --> Entrada
+Entrada --> Validacao
+Validacao --> Atividade
+Atividade --> Externa : quando houver
+Atividade --> Participante : resultado
+note bottom of Atividade
+Diagrama conceitual: nao representa
+classes necessariamente implementadas.
+end note
+@enduml
