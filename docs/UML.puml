@@ -1,17 +1,16 @@
 @startuml
-title Bootcamp.Automation.Api - fluxo de atividades (conceitual)
-actor Participante
-component "Roteiro de entrada" as Entrada
-component "Validacao" as Validacao
-component "Atividade ou teste" as Atividade
-component "Dependencia externa" as Externa
-Participante --> Entrada
-Entrada --> Validacao
-Validacao --> Atividade
-Atividade --> Externa : quando houver
-Atividade --> Participante : resultado
-note bottom of Atividade
-Diagrama conceitual: nao representa
-classes necessariamente implementadas.
+title Bootcamp.Automation.Api: componentes e artefatos
+actor "Executor de testes" as E
+component "cypress/e2e/buscar-dispositivo.cy.js — GET /objects/7" as M0
+E --> M0
+component "GET /objects/aeijeiajeijwe" as M1
+E --> M1
+component "POST /objects" as M2
+E --> M2
+component "cypress.config.js" as M3
+E --> M3
+note bottom
+Visão por artefato: não presume backend ou classes
+que não aparecem na árvore do código.
 end note
 @enduml
