@@ -1,0 +1,15 @@
+@startuml
+title Bootcamp.Automation.Api: fluxo crítico
+start
+:cy.request GET /objects/7;
+if (HTTP 200 e id='7'?) then (sim)
+:Marcar cenário de leitura aprovado;
+else (não)
+:Reportar diferença de contrato;
+endif
+:cy.request GET ID inexistente;
+:Esperar 404;
+:cy.request POST /objects;
+:Verificar status esperado 200;
+stop
+@enduml
