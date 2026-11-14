@@ -38,3 +38,23 @@ test('payload inválido retorna 400', async () => {
   assert.equal((await enviar('json incorreto')).status, 400);
   assert.equal((await enviar('{}')).status, 400);
 });
+
+
+test('corpo JSON acima de 8 KiB retorna 413 sem token', async () => {
+  const grande = JSON.stringify({ email: 'aluno@example.test', senha: 'senha-sintetica', extra: 'x'.repeat(9000) });
+  const { status, dados } = await enviar(grande);
+  assert.equal(status, 413);
+  assert.deepEqual(dados, { erro: 'corpo_excede_limite' });
+  assert.equal(dados.token, undefined);
+});
+test('corpo no limite e JSON inválido não retorna sucesso falso', async () => {
+  const { MAX_LOGIN_BODY_BYTES } = require('../src/login-demo.cjs');
+  assert.equal(MAX_LOGIN_BODY_BYTES, 8192);
+  const corpo = JSON.stringify({ email: 'aluno@example.test', senha: 'senha-sintetica', extra: 'a'.repeat(8000) });
+  assert.ok(Buffer.byteLength(corpo, 'utf8') <= MAX_LOGIN_BODY_BYTES);
+  const { status, dados } = await enviar(corpo);
+  assert.equal(status, 200);
+  assert.equal(dados.autenticado, true);
+  const falha = await enviar('{"email":"aluno@example.test","senha":"123"');
+  assert.equal(falha.status, 400);
+});

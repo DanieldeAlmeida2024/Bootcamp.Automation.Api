@@ -14,6 +14,14 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+      - name: Garantir dependências fora do Git
+        run: |
+          if [ -n "$(git ls-files -- node_modules)" ]; then
+            echo "ERRO: node_modules não pode ser versionado; use npm ci no CI."
+            exit 1
+          fi
+          test -f package.json
+          test -f package-lock.json
       - run: npm ci
       - run: npm test
       - name: Subir API fictícia e esperar health

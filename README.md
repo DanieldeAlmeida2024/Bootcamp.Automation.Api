@@ -38,3 +38,11 @@ O token emitido pela demonstração não é um mecanismo de autenticação para 
 ## Documentação
 
 [Requisitos](docs/REQUISITOS.md) · [Arquitetura](docs/ARQUITETURA.md) · [UML](docs/UML.puml) · [Plano de testes](docs/PLANO_TESTES.md) · [Guia de manutenção](AGENTS.md).
+
+## Reprodutibilidade e limites da API demonstrativa
+
+O código-fonte, o `package.json` e o `package-lock.json` são versionados; `node_modules/` deixou de ser rastreado na revisão atual. O CI executa `npm ci` e reprova qualquer tentativa de adicionar novamente arquivos de dependências ao Git.
+
+A API fictícia de login aceita no máximo **8 KiB** de corpo HTTP. Mensagens acima desse orçamento recebem **413** e não geram token; JSON inválido continua respondendo **400** e credenciais incorretas **401**. As credenciais e o token são exemplos didáticos, não autenticação para aplicações reais.
+
+A limpeza não apaga versões anteriores do histórico Git. Os testes sem dependência externa e os cenários Cypress usam somente a API HTTP local.
