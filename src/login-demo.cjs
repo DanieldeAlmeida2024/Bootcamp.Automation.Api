@@ -15,6 +15,11 @@ function criarServidor() {
     if (req.method !== 'POST' || req.url !== '/login') {
       return responder(res, 404, { erro: 'recurso_nao_encontrado' });
     }
+    // Only JSON is part of this API contract; reject media types before parsing.
+    const tipo = (req.headers['content-type'] || '').split(';', 1)[0].trim().toLowerCase();
+    if (tipo !== 'application/json') {
+      return responder(res, 415, { erro: 'tipo_de_conteudo_invalido' });
+    }
     // Limit request memory before parsing untrusted JSON.
     // Consume excess bytes without buffering them and reject with HTTP 413.
     let tamanho = 0;

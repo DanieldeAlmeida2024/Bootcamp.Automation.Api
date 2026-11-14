@@ -40,6 +40,23 @@ test('payload inválido retorna 400', async () => {
 });
 
 
+test('login rejeita tipo de corpo ausente ou divergente sem emitir token', async () => {
+  const dados = JSON.stringify({ email: 'aluno@example.test', senha: 'senha-sintetica' });
+  for (const headers of [{ 'Content-Type': 'text/plain' }, {}]) {
+    const resposta = await fetch(url + '/login', { method: 'POST', headers, body: dados });
+    assert.equal(resposta.status, 415);
+    const corpo = await resposta.json();
+    assert.deepEqual(corpo, { erro: 'tipo_de_conteudo_invalido' });
+    assert.equal(corpo.token, undefined);
+  }
+  const resposta = await fetch(url + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: dados,
+  });
+  assert.equal(resposta.status, 200);
+});
+
 test('corpo JSON acima de 8 KiB retorna 413 sem token', async () => {
   const grande = JSON.stringify({ email: 'aluno@example.test', senha: 'senha-sintetica', extra: 'x'.repeat(9000) });
   const { status, dados } = await enviar(grande);
