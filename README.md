@@ -11,7 +11,7 @@ npm install
 npx cypress open
 ```
 
-É necessário configurar uma API de teste acessível; npm test contém placeholder.
+`npm test` executa quatro testes HTTP contra uma API sintética iniciada em porta efêmera, sem serviços externos. Para validar **Cypress**, inicie a API local com `npm run demo:api` e, em outro terminal, execute `npm run test:cypress`. O workflow de PR automatiza ambos. **Não representa autenticação de produção** nem substitui testes da API real.
 
 ## Documentação
 
@@ -34,3 +34,14 @@ npx cypress open
 ### Execução
   - Abrir pasta do projeto no terminal e dentro executar o comando "npx cypress open"
   - Será exibido uma tela de abertura do cypress com o dashboard de testes.
+
+## Cenários reproduzíveis (auditoria de 13/11/2026)
+
+```bash
+npm ci
+npm test
+npm run demo:api           # terminal 1 (porta 3009, apenas localhost)
+npm run test:cypress       # terminal 2
+```
+
+Casos testados: liveness, credencial sintética aceita, senha incorreta recusada, payload malformado e ausência de token no erro. O servidor de demonstração contém credenciais inventadas e token **não autenticador**; jamais expô-lo publicamente. Integração com serviço real deve ser configurada e homologada separadamente.
