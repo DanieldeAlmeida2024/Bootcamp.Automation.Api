@@ -1,5 +1,6 @@
 // API de demonstração sintética para testar o cliente Cypress, nunca produção.
 const { createServer } = require('node:http');
+const MAX_LOGIN_BODY_BYTES = 8 * 1024; // Orçamento de payload para a API local de estudo.
 
 function responder(res, status, dados) {
   res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
@@ -14,11 +15,26 @@ function criarServidor() {
     if (req.method !== 'POST' || req.url !== '/login') {
       return responder(res, 404, { erro: 'recurso_nao_encontrado' });
     }
-    let corpo = '';
-    req.on('data', trecho => { corpo += trecho; });
+    // Limit request memory before parsing untrusted JSON.
+    // Consume excess bytes without buffering them and reject with HTTP 413.
+    let tamanho = 0;
+    let excedeuLimite = false;
+    const partes = [];
+    req.on('data', trecho => {
+      tamanho += trecho.length;
+      if (tamanho > MAX_LOGIN_BODY_BYTES) {
+        excedeuLimite = true;
+        partes.length = 0;
+      } else if (!excedeuLimite) {
+        partes.push(trecho);
+      }
+    });
     req.on('end', () => {
+      if (excedeuLimite) {
+        return responder(res, 413, { erro: 'corpo_excede_limite' });
+      }
       let dados;
-      try { dados = JSON.parse(corpo); } catch {
+      try { dados = JSON.parse(Buffer.concat(partes).toString('utf8')); } catch {
         return responder(res, 400, { erro: 'json_invalido' });
       }
       if (typeof dados?.email !== 'string' || typeof dados?.senha !== 'string') {
@@ -37,4 +53,4 @@ if (require.main === module) {
   criarServidor().listen(porta, '127.0.0.1', () => console.log('Demo disponível em 127.0.0.1:' + porta));
 }
 
-module.exports = { criarServidor };
+module.exports = { criarServidor, MAX_LOGIN_BODY_BYTES };
