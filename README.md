@@ -46,3 +46,9 @@ O código-fonte, o `package.json` e o `package-lock.json` são versionados; `nod
 A API fictícia de login aceita no máximo **8 KiB** de corpo HTTP. Mensagens acima desse orçamento recebem **413** e não geram token; JSON inválido continua respondendo **400** e credenciais incorretas **401**. As credenciais e o token são exemplos didáticos, não autenticação para aplicações reais.
 
 A limpeza não apaga versões anteriores do histórico Git. Os testes sem dependência externa e os cenários Cypress usam somente a API HTTP local.
+
+## Modelagem específica do exercício
+
+[Especificação dos cenários](docs/projeto/ESPECIFICACAO.md) · [Matriz histórica de casos](docs/testes/PLANO_DE_TESTES.md) · [Diagramas UML próprios](docs/uml/README.md).
+
+Esses documentos preservam a modelagem do exercício original. Os resultados atuais dos testes executados em CI e os critérios vigentes estão em [Plano de testes](docs/PLANO_TESTES.md).
