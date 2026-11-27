@@ -8,8 +8,8 @@
 
 ## Comandos
 ```bash
-npm install
-npx cypress open
+npm ci
+npm test
 python -m unittest discover -s tests -p "test_documentacao.py" -v
 ```
 
@@ -21,10 +21,12 @@ python -m unittest discover -s tests -p "test_documentacao.py" -v
 | --- | --- | --- |
 | API-C01 | `node_modules/` não pode estar rastreado | GitHub Actions `git ls-files -- node_modules` |
 | API-C02 | Dependências são instaladas do lockfile | `npm ci` |
-| API-T05 | Corpo HTTP maior que 8.192 bytes | Resposta HTTP 413, sem `token` |
-| API-T06 | Corpo no limite de bytes com credenciais sintéticas | Resposta HTTP 200 |
+| API-T05 | Corpo HTTP com 8.193 bytes UTF-8 | Resposta HTTP 413, sem `token` |
+| API-T06 | Corpo HTTP com exatamente 8.192 bytes UTF-8 e credenciais sintéticas | Resposta HTTP 200 |
 | API-T07 | JSON malformado, mesmo pequeno | Resposta HTTP 400 |
 | API-T08 | Senha incorreta | Resposta HTTP 401, sem `token` |
 | API-E01 | Contrato HTTP no Cypress local | `cypress/e2e/login-demo.cy.js` |
 
 Os testes não requerem servidor de autenticação real nem serviço externo. O limite controla a memória retida durante o recebimento do JSON; **não** substitui rate limiting, identidade/autorização, autenticação real ou um reverse proxy com controle de conexões.
+
+Para executar API-E01, inicie `npm run demo:api` em um terminal e execute `npm run test:cypress` em outro.
